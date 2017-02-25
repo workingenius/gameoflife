@@ -3,111 +3,255 @@
 	<head>
 	</head>
 	<body>
-		<canvas id="canvas" width=500 height=300>
+		<canvas id="canvas" width="600" height="600">
 		</canvas>
 		<script>
-			// Array
 
-			var xc = 50;
-			var yc = 30;
+			// general index
 
-			function consArray() {
+			function createIndex(...params) {
+				return params;
 			}
-			
-			function arrayValue(array, row, col) {}
 
-			function setArrayValue(array, row, col, value) {}
-
-			function arrayRowCount(array) {}
-
-			function arrayColCount(array) {}
-
-			function traverseGrid(array, func) {}
-
-			function evolve(array) {
-				var maxR = arrayRowCount(array),
-					maxC = arrayColCount(array);
-
-				function surroundGrids(r, c) {
-					var surrounds = [];
-					var i, j, sur;
-					for (i=r-1; i<=r+1; i++) {
-						for (j=c-1; j<=j+1; j++) {
-							if (i == r && j == c) continue;
-							if (i < 0 || j < 0) continue;
-							if (i >= maxR) continue;
-							if (j >= maxC) continue;
-							surrounds.push([i, j]);
-						}
-					}
-					return surrounds;
+			function indexEq(idx1, idx2) {
+				if (idx1.length !== idx2.length) return false;
+				var i, len=idx1.length;
+				for (i=0; i<len; i++) {
+					if (idx1[i] !== idx2[i]) return false;
 				}
+				return true;
+			}
 
-				traverseGrid(array, function(row, col, grid) {
-					var sur, r, c;
-					var surrounds = surroundGrids(row, col);
-					var value = 0;
-					for (var i in surrounds) {
-						[r, c] = surrounds[i];
-						value += arrayValue(array, r, c);
+			// 2D index array, constructed by row and column
+
+			function createIndex2D(row, col) {
+				return createIndex(row, col);
+			}
+
+			function index2DRow(index) {
+				return index[0];
+			}
+
+			function index2DCol(index) {
+				return index[1];
+			}
+
+			function createSqureIndices(rows, cols) {
+				var indices = [];
+				var i = 0, j = 0;
+				for (i=0; i<rows; i++) {
+					for (j=0; j<cols; j++) {
+						indices.push(
+							createIndex(i, j)
+						);
 					}
-					if (2<=value<=3) {
-						setTimeout(function() {
-							setArrayValue(row, col, 1);
-						}, 0);
-					} else {
-						setTimeout(function() {
-							setArrayValue(row, col, 0);
-						});
+				}
+				return indices;
+			}
+
+			function surroundings(idx) {
+				var r = index2DRow(idx),
+					c = index2DCol(idx);
+				return [
+					createIndex2D( r - 1, c - 1 ),
+					createIndex2D( r - 1, c ),
+					createIndex2D( r - 1, c + 1 ),
+					createIndex2D( r, c - 1 ),
+					createIndex2D( r, c + 1 ),
+					createIndex2D( r + 1, c - 1 ),
+					createIndex2D( r + 1, c ),
+					createIndex2D( r + 1, c + 1 ),
+				];
+			}
+
+			/* */
+
+			var ALIVED = 1,
+				DEAD = 0;
+
+			function psurvive(aliveSurrounderNumber) {
+				var n = aliveSurrounderNumber;
+				return n == 3;
+			}
+
+			function premain(aliveSurrounderNumber) {
+				var n = aliveSurrounderNumber;
+				return n == 2;
+		    }
+
+			function createArray(indices) {
+				return indices.map(function(index) {
+					return [index, DEAD];
+				});
+			}
+
+			function getValue(array, index) {
+				var retval;
+				array.forEach(function(grid) {
+					var idx, isAlive;
+					[idx, isAlive] = grid;
+					if (indexEq(index, idx)) {
+						retval = isAlive;
+					}
+				});
+				retval = retval || DEAD;
+				return retval;
+			}
+
+			function setValue(array, index, value) {
+				array.forEach(function(grid) {
+					var idx, isAlive;
+					[idx, isAlive] = grid;
+					if (indexEq(index, idx)) {
+						grid[1] = value;
 					}
 				});
 			}
 
-			var array = consArray();
-
-			// Draw
-
-			var cWidth = 500;
-			var cHeight = 300;
-			var canvas = document.getElementById("canvas");
-			var ctx = canvas.getContext("2d");
-
-			var xGrids = arrayColCount(array);
-			var yGrids = arrayRowCount(array);
-			var gridWidth = cWidth / xGrids;
-			var gridHeight = cHeight / yGrids;
-
-			function drawGrid(row, col, color) {
-				var x, y, w, h;
-				x = col * gridWidth;
-				y = row * gridHeight;
-				w = gridWidth;
-				h = gridHeight;
-				ctx.fillStyle = color;
-				ctx.fillRect(x, y, w, h);
+			function traverse(array, func) {
+				return array.forEach(function(grid) {
+					return func(...grid);
+				});
 			}
 
-			function draw() {
-				var i, j;
-				var color;
-				for (i=0; i<arrayRowCount(array); i++) {
-					for (j=0; j<arrayColCount(array); j++) {
-						if (arrayValue(array, i, j)) {
-							color = 'black';
-						} else {
-							color = 'grey';
-						}
-						drawGrid(i, j, color);
+			/* */
+
+			function delayed(func) {
+				return function() {
+					setTimeout(func, 0);
+				};
+			}
+
+			/* */
+
+			function propagate(array) {
+				traverse(array, function(index, isAlive) {
+					var indices = surroundings(index);
+					var aliveSurrounders = 0;
+					indices.forEach(function(index) {
+						aliveSurrounders += getValue(array, index);
+					});
+					if (psurvive(aliveSurrounders)) {
+						delayed(function() {
+							setValue(array, index, ALIVED)
+						})();
+					} else if (premain(aliveSurrounders)) {
+						// do nothing
+					} else { // dead
+						delayed(function() {
+							setValue(array, index, DEAD)
+						})();
 					}
-				}
+				});
+			}
+
+			/* */
+
+			var sideLength = 20;
+
+			function position(index) {
+				var r = index2DRow(index),
+					c = index2DCol(index);
+				return [
+					r * sideLength,
+					c * sideLength,
+					sideLength - 1,
+					sideLength - 1
+				];
+			}
+
+			function draw(ctx, array) {
+				traverse(array, function(index, isAlive) {
+					var x, y, width, height;
+					[x, y, width, height] = position(index);
+					if (isAlive) {
+						ctx.fillStyle = 'black';
+					} else {
+						ctx.fillStyle = 'rgb(200, 200, 200)';
+					}
+					ctx.fillRect(x, y, width, height);
+				})
 			}
 
 			(function start() {
+
+				var canvas = document.getElementById("canvas");
+				var ctx = canvas.getContext("2d");
+
+				var array = createArray(createSqureIndices(20, 20));
+				initArray(array);
+
+				//propagate(array);
+				//draw(ctx, array);
+
 				setInterval(function() {
-					evolve();
-					draw(array);
-				}, 3000);
+					propagate(array);
+					draw(ctx, array);
+				}, 300);
 			})();
+
+			function initArray(array) {
+				traverse(array, function(index, value) {
+					// var r = index[0],
+					// 	c = index[1];
+					// if (r == 0) {
+					// 	setValue(array, [r, c], ALIVED);
+					// }
+					// setValue(array, [0, 1], ALIVED);
+					// setValue(array, [1, 2], ALIVED);
+					// setValue(array, [2, 2], ALIVED);
+					// setValue(array, [2, 0], ALIVED);
+					// setValue(array, [2, 1], ALIVED);
+					//setValue(array, [2, 2], ALIVED);
+					//setValue(array, [2, 1], ALIVED);
+
+					plane(array, [1, 1]);
+					plane(array, [5, 1]);
+					plane(array, [1, 5]);
+					plane(array, [5, 5]);
+					//plane(array, [4, 7]);
+				});
+			}
+
+			function plane(array, center) {
+				setValue(array, up(center), ALIVED);
+				setValue(array, right(center), ALIVED);
+				setValue(array, downright(center), ALIVED);
+				setValue(array, down(center), ALIVED);
+				setValue(array, downleft(center), ALIVED);
+			}
+
+			function up(point) {
+				return [point[0], point[1] - 1];
+			}
+
+			function down(point) {
+				return [point[0], point[1] + 1];
+			}
+
+			function left(point) {
+				return [point[0] - 1, point[1]];
+			}
+
+			function right(point) {
+				return [point[0] + 1, point[1]];
+			}
+
+			function upleft(p) {
+				return up(left(p));
+			}
+
+			function upright(p) {
+				return up(right(p));
+			}
+
+			function downleft(p) {
+				return down(left(p));
+			}
+
+			function downright(p) {
+				return down(right(p));
+			}
 
 		</script>
 	</body>
