@@ -3,8 +3,12 @@
 	<head>
 	</head>
 	<body>
-		<canvas id="canvas" width="600" height="600">
-		</canvas>
+		<canvas id="canvas" width="500" height="500"></canvas>
+		<button id="switch" onclick="glob.onOff.shift();">shift</button>
+		<script>
+			glob = { };
+		</script>
+		<script src="./loop.js"></script>
 		<script>
 
 			// general index
@@ -173,24 +177,24 @@
 				})
 			}
 
-			(function start() {
-
-				var canvas = document.getElementById("canvas");
-				var ctx = canvas.getContext("2d");
-
-				var array = createArray(createSqureIndices(20, 20));
-				initArray(array);
-
-				//propagate(array);
-				//draw(ctx, array);
-
-				setInterval(function() {
-					propagate(array);
-					draw(ctx, array);
-				}, 300);
+		  	(function initCanvas() {
+				glob.canvas = document.getElementById("canvas");
+				glob.ctx = canvas.getContext("2d");
 			})();
 
-			function initArray(array) {
+			function stepProc() {
+				propagate(glob.array);
+				draw(glob.ctx, glob.array);
+			}
+
+			(function initArray() {
+				var array;
+
+				glob.array = createArray(createSqureIndices(20, 20));
+				array = glob.array;
+				// initArray(glob.array);
+				draw(glob.ctx, array);
+
 				traverse(array, function(index, value) {
 					// var r = index[0],
 					// 	c = index[1];
@@ -211,7 +215,7 @@
 					plane(array, [5, 5]);
 					//plane(array, [4, 7]);
 				});
-			}
+			})();
 
 			function plane(array, center) {
 				setValue(array, up(center), ALIVED);
@@ -252,6 +256,9 @@
 			function downright(p) {
 				return down(right(p));
 			}
+
+			glob.onOff = glob.loop(stepProc);
+			glob.onOff.start();
 
 		</script>
 	</body>
