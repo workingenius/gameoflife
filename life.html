@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<canvas id="canvas" width=500 height=300>
+		</canvas>
+		<script>
+			// Array
+
+			var xc = 50;
+			var yc = 30;
+
+			function consArray() {
+			}
+			
+			function arrayValue(array, row, col) {}
+
+			function setArrayValue(array, row, col, value) {}
+
+			function arrayRowCount(array) {}
+
+			function arrayColCount(array) {}
+
+			function traverseGrid(array, func) {}
+
+			function evolve(array) {
+				var maxR = arrayRowCount(array),
+					maxC = arrayColCount(array);
+
+				function surroundGrids(r, c) {
+					var surrounds = [];
+					var i, j, sur;
+					for (i=r-1; i<=r+1; i++) {
+						for (j=c-1; j<=j+1; j++) {
+							if (i == r && j == c) continue;
+							if (i < 0 || j < 0) continue;
+							if (i >= maxR) continue;
+							if (j >= maxC) continue;
+							surrounds.push([i, j]);
+						}
+					}
+					return surrounds;
+				}
+
+				traverseGrid(array, function(row, col, grid) {
+					var sur, r, c;
+					var surrounds = surroundGrids(row, col);
+					var value = 0;
+					for (var i in surrounds) {
+						[r, c] = surrounds[i];
+						value += arrayValue(array, r, c);
+					}
+					if (2<=value<=3) {
+						setTimeout(function() {
+							setArrayValue(row, col, 1);
+						}, 0);
+					} else {
+						setTimeout(function() {
+							setArrayValue(row, col, 0);
+						});
+					}
+				});
+			}
+
+			var array = consArray();
+
+			// Draw
+
+			var cWidth = 500;
+			var cHeight = 300;
+			var canvas = document.getElementById("canvas");
+			var ctx = canvas.getContext("2d");
+
+			var xGrids = arrayColCount(array);
+			var yGrids = arrayRowCount(array);
+			var gridWidth = cWidth / xGrids;
+			var gridHeight = cHeight / yGrids;
+
+			function drawGrid(row, col, color) {
+				var x, y, w, h;
+				x = col * gridWidth;
+				y = row * gridHeight;
+				w = gridWidth;
+				h = gridHeight;
+				ctx.fillStyle = color;
+				ctx.fillRect(x, y, w, h);
+			}
+
+			function draw() {
+				var i, j;
+				var color;
+				for (i=0; i<arrayRowCount(array); i++) {
+					for (j=0; j<arrayColCount(array); j++) {
+						if (arrayValue(array, i, j)) {
+							color = 'black';
+						} else {
+							color = 'grey';
+						}
+						drawGrid(i, j, color);
+					}
+				}
+			}
+
+			(function start() {
+				setInterval(function() {
+					evolve();
+					draw(array);
+				}, 3000);
+			})();
+
+		</script>
+	</body>
+</html>
