@@ -1,5 +1,4 @@
-(function() {
-
+(function() { 
     var indexModule = glob.indexModule;
 
     /* */
@@ -62,7 +61,8 @@
 
     /* */
 
-    function propagate(array) {
+    function calcChangings(array) {
+      var changings = [];
       traverse(array, function(index, isAlive) {
         var indices = indexModule.surroundings(index);
         var aliveSurrounders = 0;
@@ -70,15 +70,33 @@
           aliveSurrounders += getValue(array, index);
         });
         if (psurvive(aliveSurrounders)) {
-          delayed(function() {
-            setValue(array, index, ALIVED)
-          })();
+          if (!isAlive) {
+            changings.push({
+              action: 'live',
+              index: index
+            });
+          }
         } else if (premain(aliveSurrounders)) {
           // do nothing
         } else { // dead
-          delayed(function() {
-            setValue(array, index, DEAD)
-          })();
+          if (isAlive) {
+            changings.push({
+              action: 'die',
+              index: index
+            });
+          }
+        }
+      });
+      return changings;
+    }
+
+    function propagate(array, changings) {
+      changings.forEach(function(chg) {
+        var index = chg.index;
+        if (chg.action === 'live') {
+          setValue(array, index, ALIVED)
+        } else if (chg.action === 'die') {
+          setValue(array, index, DEAD)
         }
       });
     }
@@ -98,7 +116,7 @@
       ];
     }
 
-    function draw(ctx, array) {
+    function drawArray(ctx, array) {
       traverse(array, function(index, isAlive) {
         var x, y, width, height;
         [x, y, width, height] = position(index);
@@ -111,14 +129,30 @@
       })
     }
 
-      (function initCanvas() {
+    function drawChangings(ctx, array, changings) {
+      changings.forEach(function(chg) {
+        var {index, action} = chg;
+        var x, y, width, height;
+        [x, y, width, height] = position(index);
+        if (action === 'live') {
+          ctx.fillStyle = 'black';
+          ctx.fillRect(x, y, width, height);
+        } else if (action === 'die') {
+          ctx.fillStyle = 'rgb(200, 200, 200)';
+          ctx.fillRect(x, y, width, height);
+        }
+      });
+    }
+
+    (function initCanvas() {
       glob.canvas = document.getElementById("canvas");
       glob.ctx = canvas.getContext("2d");
     })();
 
     function stepProc() {
-      propagate(glob.array);
-      draw(glob.ctx, glob.array);
+      var changings = calcChangings(glob.array);
+      propagate(glob.array, changings);
+      drawChangings(glob.ctx, glob.array, changings);
     }
 
     (function initArray() {
@@ -126,29 +160,14 @@
 
       glob.array = createArray(indexModule.createIndices(20, 20));
       array = glob.array;
-      // initArray(glob.array);
-      draw(glob.ctx, array);
 
-      traverse(array, function(index, value) {
-        // var r = index[0],
-        // 	c = index[1];
-        // if (r == 0) {
-        // 	setValue(array, [r, c], ALIVED);
-        // }
-        // setValue(array, [0, 1], ALIVED);
-        // setValue(array, [1, 2], ALIVED);
-        // setValue(array, [2, 2], ALIVED);
-        // setValue(array, [2, 0], ALIVED);
-        // setValue(array, [2, 1], ALIVED);
-        //setValue(array, [2, 2], ALIVED);
-        //setValue(array, [2, 1], ALIVED);
+      // initArray
+      plane(array, [3, 3]);
+      plane(array, [7, 3]);
+      plane(array, [3, 7]);
+      plane(array, [7, 7]);
 
-        plane(array, [3, 3]);
-        plane(array, [7, 3]);
-        plane(array, [3, 7]);
-        plane(array, [7, 7]);
-        //plane(array, [4, 7]);
-      });
+      drawArray(glob.ctx, array);
     })();
 
     function plane(array, center) {
