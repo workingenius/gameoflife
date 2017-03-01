@@ -1,0 +1,197 @@
+(function() {
+
+    var indexModule = glob.indexModule;
+
+    /* */
+
+    var ALIVED = 1,
+      DEAD = 0;
+
+    function psurvive(aliveSurrounderNumber) {
+      var n = aliveSurrounderNumber;
+      return n == 3;
+    }
+
+    function premain(aliveSurrounderNumber) {
+      var n = aliveSurrounderNumber;
+      return n == 2;
+      }
+
+    function createArray(indices) {
+      return indices.map(function(index) {
+        return [index, DEAD];
+      });
+    }
+
+    function getValue(array, index) {
+      var retval;
+      array.forEach(function(grid) {
+        var idx, isAlive;
+        [idx, isAlive] = grid;
+        if (indexModule.indexEq(index, idx)) {
+          retval = isAlive;
+        }
+      });
+      retval = retval || DEAD;
+      return retval;
+    }
+
+    function setValue(array, index, value) {
+      array.forEach(function(grid) {
+        var idx, isAlive;
+        [idx, isAlive] = grid;
+        if (indexModule.indexEq(index, idx)) {
+          grid[1] = value;
+        }
+      });
+    }
+
+    function traverse(array, func) {
+      return array.forEach(function(grid) {
+        return func(...grid);
+      });
+    }
+
+    /* */
+
+    function delayed(func) {
+      return function() {
+        setTimeout(func, 0);
+      };
+    }
+
+    /* */
+
+    function propagate(array) {
+      traverse(array, function(index, isAlive) {
+        var indices = indexModule.surroundings(index);
+        var aliveSurrounders = 0;
+        indices.forEach(function(index) {
+          aliveSurrounders += getValue(array, index);
+        });
+        if (psurvive(aliveSurrounders)) {
+          delayed(function() {
+            setValue(array, index, ALIVED)
+          })();
+        } else if (premain(aliveSurrounders)) {
+          // do nothing
+        } else { // dead
+          delayed(function() {
+            setValue(array, index, DEAD)
+          })();
+        }
+      });
+    }
+
+    /* */
+
+    var sideLength = 20;
+
+    function position(index) {
+      var r = indexModule.indexRow(index),
+        c = indexModule.indexCol(index);
+      return [
+        r * sideLength,
+        c * sideLength,
+        sideLength - 1,
+        sideLength - 1
+      ];
+    }
+
+    function draw(ctx, array) {
+      traverse(array, function(index, isAlive) {
+        var x, y, width, height;
+        [x, y, width, height] = position(index);
+        if (isAlive) {
+          ctx.fillStyle = 'black';
+        } else {
+          ctx.fillStyle = 'rgb(200, 200, 200)';
+        }
+        ctx.fillRect(x, y, width, height);
+      })
+    }
+
+      (function initCanvas() {
+      glob.canvas = document.getElementById("canvas");
+      glob.ctx = canvas.getContext("2d");
+    })();
+
+    function stepProc() {
+      propagate(glob.array);
+      draw(glob.ctx, glob.array);
+    }
+
+    (function initArray() {
+      var array;
+
+      glob.array = createArray(indexModule.createIndices(20, 20));
+      array = glob.array;
+      // initArray(glob.array);
+      draw(glob.ctx, array);
+
+      traverse(array, function(index, value) {
+        // var r = index[0],
+        // 	c = index[1];
+        // if (r == 0) {
+        // 	setValue(array, [r, c], ALIVED);
+        // }
+        // setValue(array, [0, 1], ALIVED);
+        // setValue(array, [1, 2], ALIVED);
+        // setValue(array, [2, 2], ALIVED);
+        // setValue(array, [2, 0], ALIVED);
+        // setValue(array, [2, 1], ALIVED);
+        //setValue(array, [2, 2], ALIVED);
+        //setValue(array, [2, 1], ALIVED);
+
+        plane(array, [3, 3]);
+        plane(array, [7, 3]);
+        plane(array, [3, 7]);
+        plane(array, [7, 7]);
+        //plane(array, [4, 7]);
+      });
+    })();
+
+    function plane(array, center) {
+      setValue(array, up(center), ALIVED);
+      setValue(array, right(center), ALIVED);
+      setValue(array, downright(center), ALIVED);
+      setValue(array, down(center), ALIVED);
+      setValue(array, downleft(center), ALIVED);
+    }
+
+    function up(point) {
+      return [point[0], point[1] - 1];
+    }
+
+    function down(point) {
+      return [point[0], point[1] + 1];
+    }
+
+    function left(point) {
+      return [point[0] - 1, point[1]];
+    }
+
+    function right(point) {
+      return [point[0] + 1, point[1]];
+    }
+
+    function upleft(p) {
+      return up(left(p));
+    }
+
+    function upright(p) {
+      return up(right(p));
+    }
+
+    function downleft(p) {
+      return down(left(p));
+    }
+
+    function downright(p) {
+      return down(right(p));
+    }
+
+    glob.onOff = glob.loop(stepProc);
+    glob.onOff.start();
+
+})();
