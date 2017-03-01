@@ -66,6 +66,7 @@
 
   glob.indexModule = {
     indexEq: indexEq,
+    createIndex: createIndex2D,
     createIndices: createSqureIndices,
     surroundings: surroundings,
     

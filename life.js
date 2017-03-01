@@ -103,23 +103,13 @@
 
     /* */
 
-    var sideLength = 20;
-
-    function position(index) {
-      var r = indexModule.indexRow(index),
-        c = indexModule.indexCol(index);
-      return [
-        r * sideLength,
-        c * sideLength,
-        sideLength - 1,
-        sideLength - 1
-      ];
-    }
+    var position = glob.ground.indexToPosition;
 
     function drawArray(ctx, array) {
       traverse(array, function(index, isAlive) {
         var x, y, width, height;
-        [x, y, width, height] = position(index);
+        [x, y] = position(index);
+        width = height = glob.ground.sideLength - 1;
         if (isAlive) {
           ctx.fillStyle = 'black';
         } else {
@@ -134,6 +124,7 @@
         var {index, action} = chg;
         var x, y, width, height;
         [x, y, width, height] = position(index);
+        width = height = glob.ground.sideLength - 1;
         if (action === 'live') {
           ctx.fillStyle = 'black';
           ctx.fillRect(x, y, width, height);
@@ -158,7 +149,7 @@
     (function initArray() {
       var array;
 
-      glob.array = createArray(indexModule.createIndices(20, 20));
+      glob.array = createArray(indexModule.createIndices(glob.ground.rowCount, glob.ground.colCount));
       array = glob.array;
 
       // initArray
