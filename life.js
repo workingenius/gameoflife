@@ -31,7 +31,6 @@
           retval = isAlive;
         }
       });
-      retval = retval || DEAD;
       return retval;
     }
 
@@ -107,19 +106,12 @@
 
     function drawArray(ctx, array) {
       traverse(array, function(index, isAlive) {
-        var x, y, width, height;
-        [x, y] = position(index);
-        width = height = glob.ground.sideLength - 1;
-        if (isAlive) {
-          ctx.fillStyle = 'black';
-        } else {
-          ctx.fillStyle = 'rgb(200, 200, 200)';
-        }
-        ctx.fillRect(x, y, width, height);
+        syncGrid(ctx, array, index, isAlive);
       })
     }
 
     function drawChangings(ctx, array, changings) {
+      ctx.save();
       changings.forEach(function(chg) {
         var {index, action} = chg;
         var x, y, width, height;
@@ -131,8 +123,32 @@
         } else if (action === 'die') {
           ctx.fillStyle = 'rgb(200, 200, 200)';
           ctx.fillRect(x, y, width, height);
+        } else if (action === 'focus') {
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = 'blue';
+          ctx.strokeRect(x, y, width, height);
+        } else if (action === 'unfocus') {
+          ctx.clearRect(x - 1, y - 1, width + 2, height + 2);
+          syncGrid(ctx, array, index);
         }
       });
+      ctx.restore();
+    }
+
+    function syncGrid(ctx, array, index, isAlive) {
+      if (isAlive == null) isAlive = getValue(array, index);
+      var x, y, width, height;
+      [x, y] = position(index);
+      width = height = glob.ground.sideLength - 1;
+      ctx.save();
+      if (isAlive) {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(x, y, width, height);
+      } else if (isAlive === 0) {
+        ctx.fillStyle = 'rgb(200, 200, 200)';
+        ctx.fillRect(x, y, width, height);
+      }
+      ctx.restore();
     }
 
     (function initCanvas() {
@@ -203,5 +219,9 @@
 
     glob.onOff = glob.loop(stepProc);
     glob.onOff.start();
+
+    glob.view = {
+      drawChangings: drawChangings,
+    };
 
 })();

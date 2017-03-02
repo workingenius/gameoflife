@@ -14,6 +14,7 @@
   }
 
   function indexEq(idx1, idx2) {
+    if (idx1 == null || idx2 == null) return false;
     if (idx1.length !== idx2.length) return false;
     var i, len=idx1.length;
     for (i=0; i<len; i++) {
