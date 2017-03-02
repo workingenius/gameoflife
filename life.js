@@ -178,10 +178,10 @@
       array = glob.array;
 
       // initArray
-      plane(array, [3, 3]);
-      plane(array, [7, 3]);
-      plane(array, [3, 7]);
-      plane(array, [7, 7]);
+      //plane(array, [3, 3]);
+      //plane(array, [7, 3]);
+      //plane(array, [3, 7]);
+      //plane(array, [7, 7]);
 
       drawArray(glob.ctx, array);
     })();
@@ -232,6 +232,12 @@
     glob.life = {
       flip: function(...params) {
         return flip(glob.array, ...params);
+      },
+      calcChangings: function(...params) {
+        return calcChangings(glob.array);
+      },
+      propagate: function(...params) {
+        return propagate(glob.array, ...params);
       },
     };
 

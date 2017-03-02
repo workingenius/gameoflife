@@ -1,25 +1,26 @@
 (function() {
   var indexModule = glob.indexModule;
-  var sideLength = 20;
 
-  glob.ground = {
-    rowCount: 20,
-    colCount: 20,
-    sideLength: sideLength,
+  var ground = {
+    rowCount: 40,
+    colCount: 40,
+    sideLength: 10,
 
     indexToPosition: function(index) {
       var r = indexModule.indexRow(index),
         c = indexModule.indexCol(index);
       return [
-        r * sideLength,
-        c * sideLength
+        r * ground.sideLength,
+        c * ground.sideLength
       ];
     },
 
     positionToIndex: function(x, y) {
       return indexModule.createIndex(
-        Math.floor(x / sideLength),
-        Math.floor(y / sideLength));
+        Math.floor(x / ground.sideLength),
+        Math.floor(y / ground.sideLength));
     },
   };
+
+  glob.ground = ground;
 })();
