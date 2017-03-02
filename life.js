@@ -1,8 +1,6 @@
 (function() { 
     var indexModule = glob.indexModule;
 
-    /* */
-
     var ALIVED = 1,
       DEAD = 0;
 
@@ -129,143 +127,23 @@
       });
     }
 
-    /* */
-
-    var position = glob.ground.indexToPosition;
-
-    function drawArray(ctx, array) {
-      traverse(array, function(index, isAlive) {
-        syncGrid(ctx, array, index, isAlive);
-      })
-    }
-
-    function drawChangings(ctx, array, changings) {
-      ctx.save();
-      changings.forEach(function(chg) {
-        var {index, action} = chg;
-        var x, y, width, height;
-        [x, y, width, height] = position(index);
-        width = height = glob.ground.sideLength - 1;
-        if (action === 'live') {
-          ctx.fillStyle = 'black';
-          ctx.fillRect(x, y, width, height);
-        } else if (action === 'die') {
-          ctx.fillStyle = 'rgb(200, 200, 200)';
-          ctx.fillRect(x, y, width, height);
-        } else if (action === 'focus') {
-          ctx.lineWidth = 1;
-          ctx.strokeStyle = 'blue';
-          ctx.strokeRect(x, y, width, height);
-        } else if (action === 'unfocus') {
-          ctx.clearRect(x - 1, y - 1, width + 2, height + 2);
-          syncGrid(ctx, array, index);
-        }
-      });
-      ctx.restore();
-    }
-
-    function syncGrid(ctx, array, index, isAlive) {
-      if (isAlive == null) isAlive = getValue(array, index);
-      var x, y, width, height;
-      [x, y] = position(index);
-      width = height = glob.ground.sideLength - 1;
-      ctx.save();
-      if (isAlive) {
-        ctx.fillStyle = 'black';
-        ctx.fillRect(x, y, width, height);
-      } else if (isAlive === 0) {
-        ctx.fillStyle = 'rgb(200, 200, 200)';
-        ctx.fillRect(x, y, width, height);
-      }
-      ctx.restore();
-    }
-
-    (function initCanvas() {
-      glob.canvas = document.getElementById("canvas");
-      glob.ctx = canvas.getContext("2d");
-    })();
-
-    function stepProc() {
-      var changings = calcChangings(glob.array);
-      propagate(glob.array, changings);
-      drawChangings(glob.ctx, glob.array, changings);
-    }
-
-    (function initArray() {
-      var array;
-
-      glob.array = createArray(indexModule.createIndices(glob.ground.rowCount, glob.ground.colCount));
-      array = glob.array;
-
-      // initArray
-      plane(array, [3, 3]);
-      plane(array, [7, 3]);
-      plane(array, [3, 7]);
-      plane(array, [7, 7]);
-
-      drawArray(glob.ctx, array);
-    })();
-
-    function plane(array, center) {
-      setValue(array, up(center), ALIVED);
-      setValue(array, right(center), ALIVED);
-      setValue(array, downright(center), ALIVED);
-      setValue(array, down(center), ALIVED);
-      setValue(array, downleft(center), ALIVED);
-    }
-
-    function up(point) {
-      return [point[0], point[1] - 1];
-    }
-
-    function down(point) {
-      return [point[0], point[1] + 1];
-    }
-
-    function left(point) {
-      return [point[0] - 1, point[1]];
-    }
-
-    function right(point) {
-      return [point[0] + 1, point[1]];
-    }
-
-    function upleft(p) {
-      return up(left(p));
-    }
-
-    function upright(p) {
-      return up(right(p));
-    }
-
-    function downleft(p) {
-      return down(left(p));
-    }
-
-    function downright(p) {
-      return down(right(p));
-    }
-
-    glob.onOff = glob.loop(stepProc);
-    glob.onOff.start();
-
     glob.life = {
+      createArray: createArray,
+      traverse: traverse,
+      getValue: getValue,
+      setValue: setValue,
       flip: function(...params) {
         return flip(glob.array, ...params);
       },
+
       calcChangings: function(...params) {
         return calcChangings(glob.array);
       },
       propagate: function(...params) {
         return propagate(glob.array, ...params);
       },
-    };
 
-    glob.view = {
-      drawChangings: drawChangings,
-      syncGrid: function(...params) {
-        return syncGrid(glob.ctx, glob.array, ...params);
-      }
+      ALIVED: ALIVED,
+      DEAD: DEAD,
     };
-
 })();
