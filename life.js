@@ -86,6 +86,7 @@
       traverse(livings, function(index, isAlive) {
         var surs = indexModule.surroundings(index);
         surs.forEach(function(surIndex) {
+          if (!glob.ground.pInGround(surIndex)) return;
           var idxStr = _indexStr(surIndex);
           if (surrounders[idxStr] == null) {
             surrounders[idxStr] = 0;

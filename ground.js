@@ -20,6 +20,19 @@
         Math.floor(x / ground.sideLength),
         Math.floor(y / ground.sideLength));
     },
+
+    pInGround: function(index) {
+      var row, col;
+      [row, col] = [
+        indexModule.indexRow(index), 
+        indexModule.indexCol(index)
+      ];
+      if (row < 0) return false;
+      if (col < 0) return false;
+      if (row >= ground.rowCount) return false;
+      if (col >= ground.colCount) return false;
+      return true;
+    },
   };
 
   glob.ground = ground;
