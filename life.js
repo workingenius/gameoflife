@@ -14,34 +14,37 @@
     function premain(aliveSurrounderNumber) {
       var n = aliveSurrounderNumber;
       return n == 2;
-      }
-
-    function createArray(indices) {
-      return indices.map(function(index) {
-        return [index, DEAD];
-      });
     }
 
-    function getValue(array, index) {
-      var retval;
-      array.forEach(function(grid) {
-        var idx, isAlive;
-        [idx, isAlive] = grid;
-        if (indexModule.indexEq(index, idx)) {
-          retval = isAlive;
-        }
-      });
+    function pdistinct(aliveSurrounderNumber) {
+      return !aliveSurrounderNumber
+        || aliveSurrounderNumber > 3
+        || aliveSurrounderNumber < 2;
+    }
+
+    function _indexStr(index) {
+      return index.toString();
+    }
+
+    function _strIndex(str) {
+      var retval = str.split(',').map(s => parseInt(s));
       return retval;
     }
 
-    function setValue(array, index, value) {
-      array.forEach(function(grid) {
-        var idx, isAlive;
-        [idx, isAlive] = grid;
-        if (indexModule.indexEq(index, idx)) {
-          grid[1] = value;
-        }
+    function createArray(indices) {
+      var array = {};
+      indices.forEach(function(index) {
+        array[_indexStr(index)] = DEAD;
       });
+      return array;
+    }
+
+    function getValue(array, index) {
+      return array[_indexStr(index)];
+    }
+
+    function setValue(array, index, value) {
+      array[_indexStr(index)] = value;
     }
 
     function flip(array, index) {
@@ -54,9 +57,9 @@
     }
 
     function traverse(array, func) {
-      return array.forEach(function(grid) {
-        return func(...grid);
-      });
+      for (key in array) {
+        func(_strIndex(key), array[key])
+      }
     }
 
     /* */
@@ -178,10 +181,10 @@
       array = glob.array;
 
       // initArray
-      //plane(array, [3, 3]);
-      //plane(array, [7, 3]);
-      //plane(array, [3, 7]);
-      //plane(array, [7, 7]);
+      plane(array, [3, 3]);
+      plane(array, [7, 3]);
+      plane(array, [3, 7]);
+      plane(array, [7, 7]);
 
       drawArray(glob.ctx, array);
     })();
