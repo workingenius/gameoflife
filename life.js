@@ -44,6 +44,15 @@
       });
     }
 
+    function flip(array, index) {
+      var isAlive = getValue(array, index);
+      if (isAlive === ALIVED) {
+        setValue(array, index, DEAD);
+      } else if (isAlive === DEAD) {
+        setValue(array, index, ALIVED);
+      }
+    }
+
     function traverse(array, func) {
       return array.forEach(function(grid) {
         return func(...grid);
@@ -220,8 +229,17 @@
     glob.onOff = glob.loop(stepProc);
     glob.onOff.start();
 
+    glob.life = {
+      flip: function(...params) {
+        return flip(glob.array, ...params);
+      },
+    };
+
     glob.view = {
       drawChangings: drawChangings,
+      syncGrid: function(...params) {
+        return syncGrid(glob.ctx, glob.array, ...params);
+      }
     };
 
 })();
