@@ -74,30 +74,46 @@
 
     function calcChangings(array) {
       var changings = [];
+
+      var livings = {};
       traverse(array, function(index, isAlive) {
-        var indices = indexModule.surroundings(index);
-        var aliveSurrounders = 0;
-        indices.forEach(function(index) {
-          aliveSurrounders += getValue(array, index);
-        });
-        if (psurvive(aliveSurrounders)) {
-          if (!isAlive) {
-            changings.push({
-              action: 'live',
-              index: index
-            });
-          }
-        } else if (premain(aliveSurrounders)) {
-          // do nothing
-        } else { // dead
-          if (isAlive) {
-            changings.push({
-              action: 'die',
-              index: index
-            });
-          }
+        if (isAlive) {
+          livings[_indexStr(index)] = isAlive;
         }
       });
+
+      var surrounders = {};
+      traverse(livings, function(index, isAlive) {
+        var surs = indexModule.surroundings(index);
+        surs.forEach(function(surIndex) {
+          var idxStr = _indexStr(surIndex);
+          if (surrounders[idxStr] == null) {
+            surrounders[idxStr] = 0;
+          }
+          surrounders[idxStr]++;
+        });
+      });
+
+      traverse(livings, function(index, isAlive) {
+        var idxStr = _indexStr(index);
+        if (pdistinct(surrounders[idxStr])) {
+          changings.push({
+            action: 'die',
+            index: index,
+          });
+        }
+      });
+
+      traverse(surrounders, function(index, amount) {
+        var idxStr = _indexStr(index);
+        if (psurvive(amount) && livings[idxStr] == null) {
+          changings.push({
+            action: 'live',
+            index: index,
+          });
+        }
+      });
+
       return changings;
     }
 
