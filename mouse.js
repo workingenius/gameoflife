@@ -29,7 +29,7 @@
 
   glob.canvas.addEventListener('click', function(evt) {
     var index = getMouseIndex(evt);
-    glob.life.flip(index);
+    glob.life.flip(glob.array, index);
     glob.view.syncGrid(index);
   });
 })();

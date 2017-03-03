@@ -5,7 +5,7 @@
   (function initArray() {
     var array;
 
-    glob.array = lifeM.createArray(indexM.createIndices(glob.ground.rowCount, glob.ground.colCount));
+    glob.array = lifeM.createBeings(indexM.createIndices(glob.ground.rowCount, glob.ground.colCount));
     array = glob.array;
 
     // initArray
@@ -21,11 +21,11 @@
   // following codes should move elsewhere
   
   function plane(array, center) {
-    lifeM.setValue(array, up(center), lifeM.ALIVED);
-    lifeM.setValue(array, right(center), lifeM.ALIVED);
-    lifeM.setValue(array, downright(center), lifeM.ALIVED);
-    lifeM.setValue(array, down(center), lifeM.ALIVED);
-    lifeM.setValue(array, downleft(center), lifeM.ALIVED);
+    lifeM.setState(array, up(center), lifeM.ALIVED);
+    lifeM.setState(array, right(center), lifeM.ALIVED);
+    lifeM.setState(array, downright(center), lifeM.ALIVED);
+    lifeM.setState(array, down(center), lifeM.ALIVED);
+    lifeM.setState(array, downleft(center), lifeM.ALIVED);
   }
 
   function up(point) {

@@ -38,7 +38,7 @@
   }
 
   function syncGrid(ctx, array, index, isAlive) {
-    if (isAlive == null) isAlive = lifeM.getValue(array, index);
+    if (isAlive == null) isAlive = lifeM.getState(array, index);
     var x, y, width, height;
     [x, y] = position(index);
     width = height = glob.ground.sideLength - 1;

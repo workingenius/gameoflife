@@ -128,22 +128,21 @@
   }
 
   glob.life = {
-    createArray: createArray,
+    createBeings: createArray,
     traverse: traverse,
-    getValue: getValue,
-    setValue: setValue,
-    flip: function(...params) {
-      return flip(glob.array, ...params);
-    },
+    getState: getValue,
+    setState: setValue,
+    flip: flip,
 
+    ALIVED: ALIVED,
+    DEAD: DEAD,
+
+    // export only for benchmark
     calcChangings: function(...params) {
       return calcChangings(glob.array);
     },
     propagate: function(...params) {
       return propagate(glob.array, ...params);
     },
-
-    ALIVED: ALIVED,
-    DEAD: DEAD,
   };
 })();
