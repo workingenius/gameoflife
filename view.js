@@ -2,11 +2,11 @@
   var lifeM = glob.life;
   var indexM = glob.indexModule;
 
-  var ctx;
+  var canvas, ctx;
 
   (function initCanvas() {
-    glob.canvas = document.getElementById("canvas");
-    ctx = glob.canvas.getContext("2d");
+    canvas = document.getElementById("canvas");
+    ctx = canvas.getContext("2d");
   })();
 
   var position = glob.ground.indexToPosition;
@@ -71,7 +71,9 @@
     drawChangings: drawChangings,
     syncGrid: function(...params) {
       return syncGrid(glob.array, ...params);
-    }
+    },
+    
+    canvas: canvas,
   };
 
 })();
