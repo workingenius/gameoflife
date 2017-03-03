@@ -2,17 +2,22 @@
   var lifeM = glob.life;
   var indexM = glob.indexModule;
 
-  /* */
+  var ctx;
+
+  (function initCanvas() {
+    glob.canvas = document.getElementById("canvas");
+    ctx = glob.canvas.getContext("2d");
+  })();
 
   var position = glob.ground.indexToPosition;
 
-  function drawArray(ctx, array) {
+  function drawArray(array) {
     lifeM.traverse(array, function(index, isAlive) {
-      syncGrid(ctx, array, index, isAlive);
+      syncGrid(array, index, isAlive);
     })
   }
 
-  function drawChangings(ctx, array, changings) {
+  function drawChangings(array, changings) {
     ctx.save();
     changings.forEach(function(chg) {
       var {index, action} = chg;
@@ -31,13 +36,13 @@
         ctx.strokeRect(x, y, width, height);
       } else if (action === 'unfocus') {
         ctx.clearRect(x - 1, y - 1, width + 2, height + 2);
-        syncGrid(ctx, array, index);
+        syncGrid(array, index);
       }
     });
     ctx.restore();
   }
 
-  function syncGrid(ctx, array, index, isAlive) {
+  function syncGrid(array, index, isAlive) {
     if (isAlive == null) isAlive = lifeM.getState(array, index);
     var x, y, width, height;
     [x, y] = position(index);
@@ -53,15 +58,10 @@
     ctx.restore();
   }
 
-  (function initCanvas() {
-    glob.canvas = document.getElementById("canvas");
-    glob.ctx = canvas.getContext("2d");
-  })();
-
   function stepProc() {
     var changings = lifeM.calcChangings();
     lifeM.propagate(changings);
-    drawChangings(glob.ctx, glob.array, changings);
+    drawChangings(glob.array, changings);
   }
 
   glob.onOff = glob.loop(stepProc);
@@ -70,7 +70,7 @@
     drawArray: drawArray,
     drawChangings: drawChangings,
     syncGrid: function(...params) {
-      return syncGrid(glob.ctx, glob.array, ...params);
+      return syncGrid(glob.array, ...params);
     }
   };
 

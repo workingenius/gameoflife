@@ -14,7 +14,7 @@
     plane(array, [3, 7]);
     plane(array, [7, 7]);
 
-    glob.view.drawArray(glob.ctx, array);
+    glob.view.drawArray(array);
   })();
 
 

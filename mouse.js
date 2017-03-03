@@ -23,7 +23,7 @@
         index: lastIndex,
       });
     }
-    glob.view.drawChangings(glob.ctx, glob.array, changings);
+    glob.view.drawChangings(glob.array, changings);
     lastIndex = index;
   }, false);
 
