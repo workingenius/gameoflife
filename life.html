@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="stylesheet" type="text/css" href="./style.css"></link>
 	</head>
-	<body>
-		<canvas id="canvas" width="500" height="500"></canvas>
-		<button id="switch" onclick="glob.onOff.shift();">shift</button>
+	<body class="background">
+		<div class="toolbar">
+			<h1>Game of Life</h1>
+			<div class="buttons">
+				<button id="switch" onclick="glob.onOff.shift();">shift</button>
+			</div>
+		</div>
+		<div class="content">
+			<div class="vertical-center">
+				<canvas id="canvas" width="600" height="600"></canvas>
+			</div>
+		</div>
 		<script> glob = { }; </script>
 		<script src="./loop.js"></script>
 		<script src="./index.js"></script>

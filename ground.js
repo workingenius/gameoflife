@@ -2,8 +2,8 @@
   var indexModule = glob.indexModule;
 
   var ground = {
-    rowCount: 40,
-    colCount: 40,
+    rowCount: 60,
+    colCount: 60,
     sideLength: 10,
 
     indexToPosition: function(index) {
