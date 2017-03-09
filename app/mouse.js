@@ -1,6 +1,7 @@
 (function() {
   var lastIndex = null;
   var indexModule = require('index');
+  var groundModule = require('ground');
 
   function getMousePoint(mouseEvent) {
     var {layerX: x, layerY: y} = mouseEvent;
@@ -8,7 +9,7 @@
   }
 
   function getMouseIndex(mouseEvent) {
-    return glob.ground.positionToIndex(...getMousePoint(mouseEvent));
+    return groundModule.positionToIndex(...getMousePoint(mouseEvent));
   }
 
   document.addEventListener('DOMContentLoaded', function(event) {

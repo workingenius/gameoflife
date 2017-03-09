@@ -1,5 +1,6 @@
 (function() { 
   var indexModule = require('index');
+  var groundModule = require('ground');
 
   var ALIVED = 1,
     DEAD = 0;
@@ -75,7 +76,7 @@
     traverse(livings, function(index, isAlive) {
       var surs = indexModule.surroundings(index);
       surs.forEach(function(surIndex) {
-        if (!glob.ground.pInGround(surIndex)) return;
+        if (!groundModule.pInGround(surIndex)) return;
         var idxStr = indexModule.indexToStr(surIndex);
         if (surrounders[idxStr] == null) {
           surrounders[idxStr] = 0;

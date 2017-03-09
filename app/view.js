@@ -1,5 +1,6 @@
 (function() {
   var lifeM = glob.life;
+  var groundM = require('ground');
 
   var canvas, ctx;
 
@@ -8,7 +9,7 @@
     ctx = canvas.getContext("2d");
   })();
 
-  var position = glob.ground.indexToPosition;
+  var position = groundM.indexToPosition;
 
   function drawArray(array) {
     lifeM.traverse(array, function(index, isAlive) {
@@ -22,7 +23,7 @@
       var {index, action} = chg;
       var x, y, width, height;
       [x, y, width, height] = position(index);
-      width = height = glob.ground.sideLength - 1;
+      width = height = groundM.sideLength - 1;
       if (action === 'live') {
         ctx.fillStyle = 'black';
         ctx.fillRect(x, y, width, height);
@@ -45,7 +46,7 @@
     if (isAlive == null) isAlive = lifeM.getState(array, index);
     var x, y, width, height;
     [x, y] = position(index);
-    width = height = glob.ground.sideLength - 1;
+    width = height = groundM.sideLength - 1;
     ctx.save();
     if (isAlive) {
       ctx.fillStyle = 'black';

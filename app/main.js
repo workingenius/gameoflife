@@ -1,11 +1,12 @@
 (function() {
   var lifeM = glob.life;
   var indexM = require('index');
+  var groundM = require('ground');
 
   (function initArray() {
     var array;
 
-    glob.array = lifeM.createBeings(indexM.createIndices(glob.ground.rowCount, glob.ground.colCount));
+    glob.array = lifeM.createBeings(indexM.createIndices(groundM.rowCount, groundM.colCount));
     array = glob.array;
 
     // initArray
