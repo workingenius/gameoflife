@@ -1,5 +1,5 @@
 (function() {
-  var lifeM = glob.life;
+  var lifeM = require('life');
   var indexM = require('index');
   var groundM = require('ground');
 

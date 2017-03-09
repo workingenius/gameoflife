@@ -1,5 +1,5 @@
 (function() {
-  var lifeM = glob.life;
+  var lifeM = require('life');
   var groundM = require('ground');
 
   var canvas, ctx;

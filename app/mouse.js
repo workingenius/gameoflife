@@ -2,6 +2,7 @@
   var lastIndex = null;
   var indexModule = require('index');
   var groundModule = require('ground');
+  var lifeModule = require('life');
 
   function getMousePoint(mouseEvent) {
     var {layerX: x, layerY: y} = mouseEvent;
@@ -32,7 +33,7 @@
 
     glob.view.canvas.addEventListener('click', function(evt) {
       var index = getMouseIndex(evt);
-      glob.life.flip(glob.array, index);
+      lifeModule.flip(glob.array, index);
       glob.view.syncGrid(index);
     });
   });

@@ -1,4 +1,5 @@
 (function() {
+  var lifeM = require('life');
 
   function avgRuntime(syncedFunc, times=100) {
     /* @param syncedFunc, must be syncronized */
@@ -22,7 +23,7 @@
   })();
 
   function benchmarkPropagate() {
-    glob.life.propagate(glob.life.calcChangings());
+    lifeM.propagate(lifeM.calcChangings());
   }
 
   console.log(
