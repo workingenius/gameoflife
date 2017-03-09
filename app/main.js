@@ -33,6 +33,11 @@ document.addEventListener('DOMContentLoaded', function(event) {
   var switchButton = document.getElementById('switch');
   switchButton.addEventListener('click', function(event) {
     onOff.shift();
+    if (onOff.isOn()) {
+      switchButton.innerText = 'pause';
+    } else {
+      switchButton.innerText = 'play';
+    }
   });
 });
 
