@@ -25,7 +25,15 @@ function stepProc() {
   viewM.drawChangings(glob.array, changings);
 }
 
-glob.onOff = loop(stepProc);
+var onOff = loop(stepProc);
+
+
+document.addEventListener('DOMContentLoaded', function(event) {
+  var switchButton = document.getElementById('switch');
+  switchButton.addEventListener('click', function(event) {
+    onOff.shift();
+  });
+});
 
 
 // following codes should move elsewhere
