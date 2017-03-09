@@ -21,19 +21,23 @@ function pdistinct(aliveSurrounderNumber) {
 }
 
 function createArray(indices) {
-  var array = {};
-  indices.forEach(function(index) {
-    array[indexModule.indexToStr(index)] = DEAD;
-  });
+  var array = {
+    livings: {},
+    indices: indices,
+  };
   return array;
 }
 
 function getValue(array, index) {
-  return array[indexModule.indexToStr(index)];
+  return array.livings[indexModule.indexToStr(index)] || DEAD;
 }
 
 function setValue(array, index, value) {
-  array[indexModule.indexToStr(index)] = value;
+  if (value) {
+    array.livings[indexModule.indexToStr(index)] = ALIVED;
+  } else {
+    delete array.livings[indexModule.indexToStr(index)];
+  }
 }
 
 function flip(array, index) {
@@ -46,31 +50,23 @@ function flip(array, index) {
 }
 
 function traverse(array, func) {
-  for (key in array) {
-    func(indexModule.strToIndex(key), array[key])
-  }
+  var {indices, livings} = array;
+  indices.forEach(function(index) {
+    func(index, livings[indexModule.indexToStr(index)]);
+  });
 }
 
-/* */
-
-function delayed(func) {
-  return function() {
-    setTimeout(func, 0);
-  };
-}
-
-/* */
 
 function calcChangings(array) {
   var changings = [];
 
-  var livings = {};
-  traverse(array, function(index, isAlive) {
-    if (isAlive) {
-      livings[indexModule.indexToStr(index)] = isAlive;
+  function traverse(dict, func) {
+    for (var idxStr in dict) {
+      func(indexModule.strToIndex(idxStr), dict[idxStr] || DEAD);
     }
-  });
+  }
 
+  var livings = array.livings;
   var surrounders = {};
   traverse(livings, function(index, isAlive) {
     var surs = indexModule.surroundings(index);

@@ -1,6 +1,10 @@
 (function() {
   var lifeM = require('life');
   var groundM = require('ground');
+
+  groundM.rowCount = 400;
+  groundM.colCount = 400;
+
   var array = require('main').array;
 
   function avgRuntime(syncedFunc, times=100) {
