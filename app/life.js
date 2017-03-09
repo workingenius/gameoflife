@@ -1,5 +1,5 @@
 (function() { 
-  var indexModule = glob.indexModule;
+  var indexModule = require('index');
 
   var ALIVED = 1,
     DEAD = 0;

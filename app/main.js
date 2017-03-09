@@ -1,6 +1,6 @@
 (function() {
   var lifeM = glob.life;
-  var indexM = glob.indexModule;
+  var indexM = require('index');
 
   (function initArray() {
     var array;

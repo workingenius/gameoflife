@@ -1,5 +1,6 @@
 (function() {
   var lastIndex = null;
+  var indexModule = require('index');
 
   function getMousePoint(mouseEvent) {
     var {layerX: x, layerY: y} = mouseEvent;
@@ -13,7 +14,7 @@
   document.addEventListener('DOMContentLoaded', function(event) {
     glob.view.canvas.addEventListener('mousemove', function(evt) {
       var index = getMouseIndex(evt);
-      if (glob.indexModule.indexEq(index, lastIndex)) return;
+      if (indexModule.indexEq(index, lastIndex)) return;
       var changings = [{
         action: 'focus',
         index: index,

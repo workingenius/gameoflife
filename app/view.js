@@ -1,6 +1,5 @@
 (function() {
   var lifeM = glob.life;
-  var indexM = glob.indexModule;
 
   var canvas, ctx;
 
