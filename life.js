@@ -20,29 +20,20 @@
       || aliveSurrounderNumber < 2;
   }
 
-  function _indexStr(index) {
-    return index.toString();
-  }
-
-  function _strIndex(str) {
-    var retval = str.split(',').map(s => parseInt(s));
-    return retval;
-  }
-
   function createArray(indices) {
     var array = {};
     indices.forEach(function(index) {
-      array[_indexStr(index)] = DEAD;
+      array[indexModule.indexToStr(index)] = DEAD;
     });
     return array;
   }
 
   function getValue(array, index) {
-    return array[_indexStr(index)];
+    return array[indexModule.indexToStr(index)];
   }
 
   function setValue(array, index, value) {
-    array[_indexStr(index)] = value;
+    array[indexModule.indexToStr(index)] = value;
   }
 
   function flip(array, index) {
@@ -56,7 +47,7 @@
 
   function traverse(array, func) {
     for (key in array) {
-      func(_strIndex(key), array[key])
+      func(indexModule.strToIndex(key), array[key])
     }
   }
 
@@ -76,7 +67,7 @@
     var livings = {};
     traverse(array, function(index, isAlive) {
       if (isAlive) {
-        livings[_indexStr(index)] = isAlive;
+        livings[indexModule.indexToStr(index)] = isAlive;
       }
     });
 
@@ -85,7 +76,7 @@
       var surs = indexModule.surroundings(index);
       surs.forEach(function(surIndex) {
         if (!glob.ground.pInGround(surIndex)) return;
-        var idxStr = _indexStr(surIndex);
+        var idxStr = indexModule.indexToStr(surIndex);
         if (surrounders[idxStr] == null) {
           surrounders[idxStr] = 0;
         }
@@ -94,7 +85,7 @@
     });
 
     traverse(livings, function(index, isAlive) {
-      var idxStr = _indexStr(index);
+      var idxStr = indexModule.indexToStr(index);
       if (pdistinct(surrounders[idxStr])) {
         changings.push({
           action: 'die',
@@ -104,7 +95,7 @@
     });
 
     traverse(surrounders, function(index, amount) {
-      var idxStr = _indexStr(index);
+      var idxStr = indexModule.indexToStr(index);
       if (psurvive(amount) && livings[idxStr] == null) {
         changings.push({
           action: 'live',

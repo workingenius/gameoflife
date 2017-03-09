@@ -65,6 +65,16 @@
     ];
   }
 
+  function _indexStr(index) {
+    return index.toString();
+  }
+
+  function _strIndex(str) {
+    var retval = str.split(',').map(s => parseInt(s));
+    return retval;
+  }
+
+
   glob.indexModule = {
     indexEq: indexEq,
     createIndex: createIndex2D,
@@ -73,5 +83,8 @@
     
     indexRow: index2DRow,
     indexCol: index2DCol,
+
+    indexToStr: _indexStr,
+    strToIndex: _strIndex,
   };
 })();
