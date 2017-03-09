@@ -3,6 +3,7 @@
   var indexModule = require('index');
   var groundModule = require('ground');
   var lifeModule = require('life');
+  var viewModule = require('view');
 
   function getMousePoint(mouseEvent) {
     var {layerX: x, layerY: y} = mouseEvent;
@@ -14,7 +15,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function(event) {
-    glob.view.canvas.addEventListener('mousemove', function(evt) {
+    viewModule.canvas.addEventListener('mousemove', function(evt) {
       var index = getMouseIndex(evt);
       if (indexModule.indexEq(index, lastIndex)) return;
       var changings = [{
@@ -27,14 +28,14 @@
           index: lastIndex,
         });
       }
-      glob.view.drawChangings(glob.array, changings);
+      viewModule.drawChangings(glob.array, changings);
       lastIndex = index;
     }, false);
 
-    glob.view.canvas.addEventListener('click', function(evt) {
+    viewModule.canvas.addEventListener('click', function(evt) {
       var index = getMouseIndex(evt);
       lifeModule.flip(glob.array, index);
-      glob.view.syncGrid(index);
+      viewModule.syncGrid(index);
     });
   });
 })();
