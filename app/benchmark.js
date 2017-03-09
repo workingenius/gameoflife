@@ -1,4 +1,7 @@
 (function() {
+  var lifeM = require('life');
+  var groundM = require('ground');
+  var array = require('main').array;
 
   function avgRuntime(syncedFunc, times=100) {
     /* @param syncedFunc, must be syncronized */
@@ -13,16 +16,8 @@
     return timeConsuming / times;
   }
 
-  (function initEnv() {
-    var ground = glob.ground;
-    ground.rowCount = 40;
-    ground.rowCount = 40;
-    ground.sideLength = 10;
-    glob.onOff.pause();
-  })();
-
   function benchmarkPropagate() {
-    glob.life.propagate(glob.life.calcChangings());
+    lifeM.propagate(array, lifeM.calcChangings(array));
   }
 
   console.log(
