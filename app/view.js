@@ -58,16 +58,6 @@
     ctx.restore();
   }
 
-  function stepProc() {
-    var changings = lifeM.calcChangings();
-    lifeM.propagate(changings);
-    drawChangings(glob.array, changings);
-  }
-
-  var loop = require('loop');
-
-  glob.onOff = loop(stepProc);
-
   glob.view = {
     drawArray: drawArray,
     drawChangings: drawChangings,

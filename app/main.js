@@ -2,6 +2,7 @@
   var lifeM = require('life');
   var indexM = require('index');
   var groundM = require('ground');
+  var loop = require('loop');
 
   (function initArray() {
     var array;
@@ -17,6 +18,14 @@
 
     glob.view.drawArray(array);
   })();
+
+  function stepProc() {
+    var changings = lifeM.calcChangings();
+    lifeM.propagate(changings);
+    glob.view.drawChangings(glob.array, changings);
+  }
+
+  glob.onOff = loop(stepProc);
 
 
   // following codes should move elsewhere
