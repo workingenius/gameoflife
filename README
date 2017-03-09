@@ -1,0 +1,18 @@
+This project implements Convey's game of life by html5 canvas.
+
+For more infomation about the game, check:
+
+https://en.wikipedia.org/wiki/Conway's_Game_of_Life
+
+
+More features to come:
+
+* adjust propagation interval
+* common cell groups
+* keyboard operation
+* breif introduction
+
+
+Enhancements:
+
+* support mobile browsers
