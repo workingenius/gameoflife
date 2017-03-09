@@ -90,3 +90,20 @@ h1 {
 	color: white;
 	font-size: 1.4em;
 }
+
+#wiki {
+	font-family: sans-serif;
+	font-size: 0.4em;
+	font-weight: bold;
+	text-align: center;
+	color: #ccf;
+
+	display: inline-block;
+
+	border: 1px solid #ccf;
+	border-radius: 0.5em;
+	height: 1em;
+	width: 1em;
+
+	margin-left: 0.1em;
+}
