@@ -60,9 +60,7 @@ function syncGrid(array, index, isAlive) {
 module.exports = {
   drawArray: drawArray,
   drawChangings: drawChangings,
-  syncGrid: function(...params) {
-    return syncGrid(glob.array, ...params);
-  },
+  syncGrid: syncGrid,
 
   canvas: canvas,
 };

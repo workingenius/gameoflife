@@ -129,10 +129,8 @@ module.exports = {
   DEAD: DEAD,
 
   // export only for benchmark
-  calcChangings: function(...params) {
-    return calcChangings(glob.array);
-  },
-  propagate: function(...params) {
-    return propagate(glob.array, ...params);
-  },
+  // Don't believe comments above!
+  // Wrong comments are sometimes misleading... Be careful.
+  calcChangings: calcChangings,
+  propagate: propagate,
 };

@@ -18,6 +18,7 @@ function getMouseIndex(mouseEvent) {
 
 document.addEventListener('DOMContentLoaded', function(event) {
   viewModule.canvas.addEventListener('mousemove', function(evt) {
+    var array = require('main').array;
     var index = getMouseIndex(evt);
     if (indexModule.indexEq(index, lastIndex)) return;
     var changings = [{
@@ -30,13 +31,14 @@ document.addEventListener('DOMContentLoaded', function(event) {
         index: lastIndex,
       });
     }
-    viewModule.drawChangings(glob.array, changings);
+    viewModule.drawChangings(array, changings);
     lastIndex = index;
   }, false);
 
   viewModule.canvas.addEventListener('click', function(evt) {
+    var array = require('main').array;
     var index = getMouseIndex(evt);
-    lifeModule.flip(glob.array, index);
-    viewModule.syncGrid(index);
+    lifeModule.flip(array, index);
+    viewModule.syncGrid(array, index);
   });
 });

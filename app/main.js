@@ -4,11 +4,12 @@ var groundM = require('ground');
 var viewM = require('view');
 var loop = require('loop');
 
-(function initArray() {
-  var array;
 
-  glob.array = lifeM.createBeings(indexM.createIndices(groundM.rowCount, groundM.colCount));
-  array = glob.array;
+var array;
+
+
+(function initArray() {
+  array = lifeM.createBeings(indexM.createIndices(groundM.rowCount, groundM.colCount));
 
   // initArray
   plane(array, [3, 3]);
@@ -20,9 +21,9 @@ var loop = require('loop');
 })();
 
 function stepProc() {
-  var changings = lifeM.calcChangings();
-  lifeM.propagate(changings);
-  viewM.drawChangings(glob.array, changings);
+  var changings = lifeM.calcChangings(array);
+  lifeM.propagate(array, changings);
+  viewM.drawChangings(array, changings);
 }
 
 var onOff = loop(stepProc);
@@ -34,6 +35,11 @@ document.addEventListener('DOMContentLoaded', function(event) {
     onOff.shift();
   });
 });
+
+
+module.exports = {
+  array: array
+};
 
 
 // following codes should move elsewhere
