@@ -1,0 +1,12 @@
+{
+  "name": "game_of_life",
+  "version": "0.0.1",
+  "author": "Nathan Hardy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/workingenius/gameoflife"
+  },
+  "devDependencies": {
+    "brunch": "^2.10.8"
+  }
+}
