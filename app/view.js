@@ -64,7 +64,9 @@
     drawChangings(glob.array, changings);
   }
 
-  glob.onOff = glob.loop(stepProc);
+  var loop = require('loop');
+
+  glob.onOff = loop(stepProc);
 
   glob.view = {
     drawArray: drawArray,
