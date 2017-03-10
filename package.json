@@ -8,5 +8,12 @@
   },
   "devDependencies": {
     "brunch": "^2.10.8"
+  },
+  "dependencies": {
+    "http-server": "^0.9.0"
+  },
+  "scripts": {
+    "run-server": "http-server ./public/",
+    "build": "brunch build"
   }
 }
