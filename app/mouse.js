@@ -8,8 +8,9 @@ var lastIndex = null;
 
 
 function getMousePoint(mouseEvent) {
-  var {layerX: x, layerY: y} = mouseEvent;
-  return [x, y];
+  var {left: x0, top: y0} = mouseEvent.target.getBoundingClientRect();
+  var {clientX: x, clientY: y} = mouseEvent;
+  return [x - x0, y - y0];
 }
 
 function getMouseIndex(mouseEvent) {
@@ -41,4 +42,4 @@ document.addEventListener('DOMContentLoaded', function(event) {
     lifeModule.flip(array, index);
     viewModule.syncGrid(array, index);
   });
-});
+}, true);
