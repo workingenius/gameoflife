@@ -10,8 +10,19 @@
 					<sup id="wiki">?</sup>
 				</a>
 			</h1>
-			<div class="buttons">
-				<button id="switch">play</button>
+			<div class="control-container">
+				<div class="control-boudary">
+					<div class="control">
+						<div>fast</div>
+						<input type="range" 
+							id="speed" class="control"
+							orient="vertical" min=1 max=9 value=5>
+						<div>slow</div>
+					</div>
+				</div>
+				<div class="control-boudary control-wrapper">
+					<button class="control" id="switch">play</button>
+				</div>
 			</div>
 		</div>
 		<div class="content">

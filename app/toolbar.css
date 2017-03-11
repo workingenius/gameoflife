@@ -1,0 +1,84 @@
+
+.toolbar {
+	box-sizing: border-box;
+	height: 100%;
+	width: 220px;
+	margin-width: 0;
+	padding: 20px;
+	position: absolute;
+}
+
+/* toolbar widgets style: */
+
+.control-container {
+	position: absolute;
+	left: 0;
+	bottom: 20px;
+	text-align: center;
+	width: 100%;
+}
+
+.control-boudary {
+	margin: 1rem auto auto auto;
+	display: block;
+	width: 4rem;
+	min-height: 4rem;
+
+	border: 2px solid #555;
+	border-radius: 2rem;
+
+	overflow: hidden;
+	padding: 0.5em 0 0.5em 0;
+
+	font-size: 1rem;
+}
+
+.control-wrapper {
+	/* should override .control-boudary if both indicate
+	 * more over, wrapper react to hover event*/
+	border: 2px solid white;
+	padding: 0;
+	font-size: 1.1rem;
+}
+
+.control {
+	width: 100%;
+	font-size: inherit;
+	color: white;
+	font-family: monospace;
+}
+
+input[type=range][orient=vertical] {
+	/* be vertical 
+	 * firefox set orient="vertical" as element attr */
+	-webkit-appearance: slider-vertical; /* WebKit */
+	writing-mode: bt-lr; /* IE */
+
+	height: 8rem;
+}
+
+
+button {
+	padding: 0;
+	height: 4rem;
+
+	background-color: transparent;
+	border-color: transparent;
+}
+
+.control-wrapper:hover {
+	border-color: #88f;
+}
+
+button:hover {
+	color: #88f;
+}
+
+button:active {
+	font-size: 0.8em;
+}
+
+button:focus, input:focus {
+	outline-color: transparent; /* webkit */
+}
+
