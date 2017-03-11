@@ -39,6 +39,23 @@ document.addEventListener('DOMContentLoaded', function(event) {
       switchButton.innerText = 'play';
     }
   });
+
+  var speedBar = document.getElementById('speed');
+  speedBar.addEventListener('input', speedHandler);
+  speedBar.addEventListener('change', speedHandler);
+  onOff.interval = speedLevelToInterval(parseInt(speedBar.value));
+
+  function speedLevelToInterval(level) {
+    // expected level are between 1 to 9
+    return 5000 - 612 * level;
+  }
+
+  function speedHandler(event) {
+    var level = parseInt(event.target.value);
+    interval = speedLevelToInterval(level);
+    onOff.setInterval(interval);
+  }
+
 });
 
 
