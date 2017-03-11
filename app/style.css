@@ -1,3 +1,6 @@
+.control, canvas {
+	user-select: none;
+}
 
 html {
 	height: 100%;
@@ -23,15 +26,6 @@ div.vertical-center {
 	vertical-align: middle;
 }
 
-.toolbar {
-	box-sizing: border-box;
-	height: 100%;
-	width: 220px;
-	margin-width: 0;
-	padding: 20px;
-	position: absolute;
-}
-
 .content {
 	height: 100%;
 	min-width: 600px;
@@ -51,45 +45,6 @@ div.vertical-center {
 
 .background {
 	background-color: #333;
-}
-
-.buttons {
-	position: absolute;
-	left: 0;
-	bottom: 20px;
-	text-align: center;
-	width: 100%;
-}
-
-button {
-	width: 4em;
-	height: 4em;
-	border-radius: 2em;
-	color: white;
-	padding: 0;
-	background-color: transparent;
-	box-sizing: content-box;
-
-	border: 2px solid white;
-	margin: auto;
-
-	font-family: monospace;
-}
-
-button:hover {
-	color: #88f;
-	border-color: #88f;
-}
-
-button:active {
-	margin: 0.1em;
-	width: 3.8em;
-	height: 3.8em;
-	border-radius: 1.9em;
-}
-
-button:focus {
-	outline-color: transparent;
 }
 
 h1 {
